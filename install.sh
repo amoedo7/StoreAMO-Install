@@ -3,10 +3,10 @@ set -euo pipefail
 
 OWNER="amoedo7"
 REPO="StoreAMO"
-BOOTSTRAP_TAG="bootstrap-v0.0.1"
+BOOTSTRAP_TAG="bootstrap-v0.0.2"
 API="https://api.github.com/repos/${OWNER}/${REPO}/releases/tags/${BOOTSTRAP_TAG}"
 WEB="https://github.com/${OWNER}/StoreAMO-Web"
-UA="StoreAMO-Install/2"
+UA="StoreAMO-Install/3"
 
 say(){ printf '%s\n' "$*"; }
 fail(){ say "StoreAMO: $*" >&2; exit 1; }
@@ -21,9 +21,9 @@ if [ "$is_android" -eq 1 ]; then
   command -v sha256sum >/dev/null 2>&1 || fail "necesito sha256sum para verificar el APK."
 
   json="$(curl -fsSL -H "User-Agent: $UA" "$API" 2>/dev/null || true)"
-  [ -n "$json" ] || fail "no pude obtener StoreAMO Bootstrap 0.0.1."
+  [ -n "$json" ] || fail "no pude obtener StoreAMO Bootstrap 0.0.2."
 
-  readarray -t assets < <(printf '%s' "$json" | python -c 'import json,sys; d=json.load(sys.stdin); a={x.get("name",""):x.get("browser_download_url","") for x in d.get("assets",[])}; print(a.get("StoreAMO-Bootstrap-0.0.1.apk","")); print(a.get("SHA256SUMS.txt",""))' 2>/dev/null)
+  readarray -t assets < <(printf '%s' "$json" | python -c 'import json,sys; d=json.load(sys.stdin); a={x.get("name",""):x.get("browser_download_url","") for x in d.get("assets",[])}; print(a.get("StoreAMO-Bootstrap-0.0.2.apk","")); print(a.get("SHA256SUMS.txt",""))' 2>/dev/null)
   apk_url="${assets[0]:-}"
   sums_url="${assets[1]:-}"
   [ -n "$apk_url" ] || fail "la Release bootstrap no contiene el APK esperado."
@@ -34,10 +34,10 @@ if [ "$is_android" -eq 1 ]; then
 
   outdir="${HOME}/downloads/StoreAMO"
   mkdir -p "$outdir"
-  outfile="$outdir/StoreAMO-Bootstrap-0.0.1.apk"
+  outfile="$outdir/StoreAMO-Bootstrap-0.0.2.apk"
   sumsfile="$outdir/SHA256SUMS.txt"
 
-  say "Descargando StoreAMO Bootstrap 0.0.1 oficial…"
+  say "Descargando StoreAMO Bootstrap 0.0.2 oficial…"
   curl -fL --retry 2 -H "User-Agent: $UA" "$apk_url" -o "$outfile"
   curl -fL --retry 2 -H "User-Agent: $UA" "$sums_url" -o "$sumsfile"
   (cd "$outdir" && sha256sum -c SHA256SUMS.txt >/dev/null) || fail "SHA-256 del APK no coincide."
@@ -45,9 +45,9 @@ if [ "$is_android" -eq 1 ]; then
 
   if command -v termux-open >/dev/null 2>&1; then
     termux-open "$outfile"
-    say "Android debería mostrar ahora el instalador del sistema."
+    say "Android debería mostrar ahora el instalador del sistema. Después de instalar y abrir StoreAMO, autorizá ‘Permitir desde esta fuente’; StoreAMO continuará con la versión actual."
   else
-    say "Abrí manualmente el APK para instalarlo."
+    say "Abrí manualmente el APK para instalarlo. Después abrí StoreAMO y autorizá ‘Permitir desde esta fuente’."
   fi
   exit 0
 fi

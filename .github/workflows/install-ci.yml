@@ -21,14 +21,21 @@ jobs:
         run: |
           set -euo pipefail
           bash -n install.sh
-          grep -F 'BOOTSTRAP_TAG="bootstrap-v0.0.1"' install.sh
+          grep -F 'BOOTSTRAP_TAG="bootstrap-v0.0.2"' install.sh
           grep -F 'sha256sum -c SHA256SUMS.txt' install.sh
-          grep -F 'StoreAMO-Bootstrap-0.0.1.apk' install.sh
+          grep -F 'StoreAMO-Bootstrap-0.0.2.apk' install.sh
+          ! grep -F 'bootstrap-v0.0.1' README.md install.sh
       - name: Validate documented bootstrap release exists
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          curl -fsSL -H "User-Agent: StoreAMO-Install-CI/1" \
-            https://api.github.com/repos/amoedo7/StoreAMO/releases/tags/bootstrap-v0.0.1 \
-            | python -c 'import json,sys; d=json.load(sys.stdin); names={a["name"] for a in d.get("assets",[])}; assert "StoreAMO-Bootstrap-0.0.1.apk" in names; assert "SHA256SUMS.txt" in names'
+          curl -fsSL -H "User-Agent: StoreAMO-Install-CI/2" \
+            https://api.github.com/repos/amoedo7/StoreAMO/releases/tags/bootstrap-v0.0.2 \
+            | python -c 'import json,sys; d=json.load(sys.stdin); names={a["name"] for a in d.get("assets",[])}; assert d.get("prerelease") is True; assert "StoreAMO-Bootstrap-0.0.2.apk" in names; assert "SHA256SUMS.txt" in names'
+      - name: Validate obsolete bootstrap release is gone
+        run: |
+          set -euo pipefail
+          old_tag="bootstrap-v0.0."'1'
+          code="$(curl -sS -o /dev/null -w '%{http_code}' -H 'User-Agent: StoreAMO-Install-CI/2' "https://api.github.com/repos/amoedo7/StoreAMO/releases/tags/${old_tag}")"
+          test "$code" = "404"
