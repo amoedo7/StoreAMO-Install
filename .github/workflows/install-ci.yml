@@ -24,7 +24,7 @@ jobs:
           grep -F 'BOOTSTRAP_TAG="bootstrap-v0.0.2"' install.sh
           grep -F 'sha256sum -c SHA256SUMS.txt' install.sh
           grep -F 'StoreAMO-Bootstrap-0.0.2.apk' install.sh
-          ! grep -R -F 'bootstrap-v0.0.1' README.md install.sh .github/workflows/install-ci.yml
+          ! grep -F 'bootstrap-v0.0.1' README.md install.sh
       - name: Validate documented bootstrap release exists
         env:
           GH_TOKEN: ${{ github.token }}
@@ -36,5 +36,6 @@ jobs:
       - name: Validate obsolete bootstrap release is gone
         run: |
           set -euo pipefail
-          code="$(curl -sS -o /dev/null -w '%{http_code}' -H 'User-Agent: StoreAMO-Install-CI/2' https://api.github.com/repos/amoedo7/StoreAMO/releases/tags/bootstrap-v0.0.1)"
+          old_tag="bootstrap-v0.0."'1'
+          code="$(curl -sS -o /dev/null -w '%{http_code}' -H 'User-Agent: StoreAMO-Install-CI/2' "https://api.github.com/repos/amoedo7/StoreAMO/releases/tags/${old_tag}")"
           test "$code" = "404"
