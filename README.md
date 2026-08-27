@@ -10,7 +10,9 @@
 
 ---
 
-StoreAMO-Install no contiene aplicaciones ni claves privadas. Resuelve la plataforma, consulta la **Release oficial** de `amoedo7/StoreAMO` cuando corresponde y deriva a la experiencia adecuada.
+StoreAMO-Install no contiene aplicaciones ni claves privadas. Resuelve la plataforma y deriva a la experiencia adecuada.
+
+En Android la entrada canónica es **StoreAMO Bootstrap 0.0.1**. Esa semilla se conserva separada del canal estable actual: instala una StoreAMO mínima con la misma identidad Android/firma y, al abrirse, descubre y verifica la versión moderna de StoreAMO para actualizarse in-place.
 
 ## Comandos
 
@@ -48,9 +50,9 @@ No intentamos instalar APK. La entrada es **StoreAMO Web/PWA**. Ver [`ios/README
 
 ## Regla de seguridad
 
-El instalador sólo acepta URLs HTTPS de GitHub Releases del repositorio oficial. En Android descarga el APK de la última Release estable; la propia StoreAMO vuelve a verificar el artefacto según su catálogo antes de distribuir otras apps.
+Android consulta exclusivamente la Release oficial `bootstrap-v0.0.1` de `amoedo7/StoreAMO`, exige los assets `StoreAMO-Bootstrap-0.0.1.apk` y `SHA256SUMS.txt`, restringe ambas URLs al repositorio/tag esperado y verifica SHA-256 antes de abrir el instalador del sistema.
 
-Si todavía no existe una Release oficial, el script **no inventa una descarga**: explica que la versión estable aún no fue publicada.
+La semilla no es la release `latest` de StoreAMO. El canal moderno sigue siendo `0.4.3.x`; la propia 0.0.1 descubre sólo versiones compatibles de esa línea y vuelve a verificar el artefacto antes de solicitar la actualización.
 
 ---
 
