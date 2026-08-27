@@ -17,22 +17,5 @@ jobs:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
         with:
           persist-credentials: false
-      - name: Validate shell entrypoints
-        run: |
-          set -euo pipefail
-          bash -n install.sh
-          grep -F 'BOOTSTRAP_TAG="bootstrap-v0.0.3"' install.sh
-          grep -F 'sha256sum -c SHA256SUMS.txt' install.sh
-          grep -F 'StoreAMO-Bootstrap-0.0.3.apk' install.sh
-      - name: Validate documented bootstrap release exists
-        run: |
-          set -euo pipefail
-          curl -fsSL -H "User-Agent: StoreAMO-Install-CI/3" \
-            https://api.github.com/repos/amoedo7/StoreAMO/releases/tags/bootstrap-v0.0.3 \
-            | python -c 'import json,sys; d=json.load(sys.stdin); names={a["name"] for a in d.get("assets",[])}; assert d.get("prerelease") is True; assert "StoreAMO-Bootstrap-0.0.3.apk" in names; assert "SHA256SUMS.txt" in names'
-      - name: Validate unsafe bootstrap release is gone
-        run: |
-          set -euo pipefail
-          old_tag="bootstrap-v0.0."'2'
-          code="$(curl -sS -o /dev/null -w '%{http_code}' -H 'User-Agent: StoreAMO-Install-CI/3' "https://api.github.com/repos/amoedo7/StoreAMO/releases/tags/${old_tag}")"
-          test "$code" = "404"
+      - name: StoreAMO-Install AutoCheck
+        run: bash scripts/autocheck.sh
