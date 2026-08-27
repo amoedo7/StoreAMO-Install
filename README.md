@@ -12,7 +12,7 @@
 
 StoreAMO-Install no contiene aplicaciones ni claves privadas. Resuelve la plataforma y deriva a la experiencia adecuada.
 
-En Android la entrada canónica es **StoreAMO Bootstrap 0.0.2**. Esa semilla está separada del canal estable: se instala una sola vez y, al abrirse, comprueba primero si Android autorizó a StoreAMO como fuente de instalación. Si falta, abre directamente `Permitir desde esta fuente`; cuando el usuario vuelve, continúa sola, descubre la versión estable actual, descarga por HTTPS y usa el pipeline de StoreAMO para verificar integridad/firma y solicitar la actualización.
+En Android la entrada canónica es **StoreAMO Bootstrap 0.0.3**. La semilla está separada del canal estable y fue diseñada para evitar el bloqueo observado de Google Play Protect: **no declara permisos para instalar ni eliminar otras aplicaciones**. Una vez instalada, descubre la StoreAMO estable oficial y abre su APK mediante HTTPS en el navegador/descargas visibles de Android; el sistema conserva siempre la confirmación de instalación.
 
 ## Comandos
 
@@ -50,15 +50,15 @@ No intentamos instalar APK. La entrada es **StoreAMO Web/PWA**. Ver [`ios/README
 
 ## Qué hace Android la primera vez
 
-El navegador o Termux puede descargar y abrir el APK, pero **Android exige que el usuario confirme la instalación inicial**. Ningún enlace web puede saltarse esa protección en un teléfono personal normal.
+El navegador o Termux descarga y abre el APK, pero **Android exige que el usuario confirme la instalación inicial**. Ningún enlace web puede saltarse esa protección en un teléfono personal normal.
 
-Después de esa única instalación, Bootstrap 0.0.2 cambia el orden del flujo: **autorizar StoreAMO → buscar versión actual → descargar → verificar → solicitar instalación/actualización**. StoreAMO también puede solicitar desinstalaciones oficiales de apps; Android conserva cualquier confirmación final que el sistema exija.
+Después de instalar Bootstrap 0.0.3, la app localiza la release estable oficial y abre la descarga correspondiente. StoreAMO mantiene verificación de catálogo/SHA-256, pero la instalación final permanece en la interfaz visible de Android; StoreAMO no se concede a sí misma permisos para instalar aplicaciones arbitrarias.
 
 ## Regla de seguridad
 
-Android consulta exclusivamente la Release oficial `bootstrap-v0.0.2` de `amoedo7/StoreAMO`, exige los assets `StoreAMO-Bootstrap-0.0.2.apk` y `SHA256SUMS.txt`, restringe ambas URLs al repositorio/tag esperado y verifica SHA-256 antes de abrir el instalador del sistema.
+Android consulta exclusivamente la Release oficial `bootstrap-v0.0.3` de `amoedo7/StoreAMO`, exige los assets `StoreAMO-Bootstrap-0.0.3.apk` y `SHA256SUMS.txt`, restringe ambas URLs al repositorio/tag esperado y verifica SHA-256 antes de abrir el instalador del sistema.
 
-La semilla no es la release `latest` de StoreAMO. El canal moderno sigue siendo `0.4.3.x`; la propia 0.0.2 descubre sólo versiones compatibles de esa línea y vuelve a verificar el artefacto antes de solicitar la actualización.
+La semilla no es la release `latest` de StoreAMO. El canal moderno sigue siendo `0.4.3.x`; actualmente la línea segura comienza en `0.4.3.81`. Tanto la semilla como la Store estable carecen de `REQUEST_INSTALL_PACKAGES` y `REQUEST_DELETE_PACKAGES`.
 
 ---
 
