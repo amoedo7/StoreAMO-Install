@@ -8,10 +8,10 @@
   "membership": "candidate",
   "trust": "inspected",
   "unit": {
-    "purpose": "Ser la puerta de entrada multiplataforma a StoreAMO sin contener claves privadas ni saltarse las protecciones del sistema operativo.",
-    "responsibility": "Resolver la plataforma y derivar a StoreAMO Install; en Android fijar la release del helper, verificar SHA-256 y usar una frontera de instalación dedicada con confirmación visible del sistema.",
+    "purpose": "Conservar compatibilidad multiplataforma y derivar Android a la semilla canónica StoreAMO 0.0.1 sin contener claves privadas ni saltarse protecciones del sistema operativo.",
+    "responsibility": "Resolver la plataforma; en Android fijar seed-v0.0.1, verificar SHA-256 y abrir StoreAMO-0.0.1.apk como entrada desde cero. La semilla, no este repo, mantiene luego la Store principal.",
     "owner": "human_responsible",
-    "capabilities": ["distribution-entrypoint", "bootstrap-discovery", "sha256-verification", "platform-routing", "package-installer-boundary"]
+    "capabilities": ["distribution-entrypoint", "seed-discovery", "sha256-verification", "platform-routing", "package-installer-boundary"]
   },
   "model": {
     "inherits": [],
@@ -19,8 +19,9 @@
     "rules": [
       "No contiene claves privadas ni material de firma.",
       "No instala APK de forma silenciosa ni evita la confirmación visible de Android.",
-      "La entrada Android permanece fijada a una release StoreAMO Install explícita y verifica SHA-256.",
-      "REQUEST_INSTALL_PACKAGES pertenece sólo al helper dedicado; StoreAMO principal no lo hereda.",
+      "La entrada Android permanece fijada a StoreAMO 0.0.1 / seed-v0.0.1 y verifica SHA-256.",
+      "No crear nuevas versiones bootstrap 0.0.x: StoreAMO 0.0.1 es la semilla permanente.",
+      "REQUEST_INSTALL_PACKAGES pertenece sólo a la semilla; StoreAMO principal no lo hereda.",
       "No desactivar ni eludir Play Protect o políticas del dispositivo."
     ]
   },
@@ -36,7 +37,8 @@
     "contains_private_signing_material": false,
     "silent_install_allowed": false,
     "system_confirmation_required": true,
-    "play_protect_bypass_allowed": false
+    "play_protect_bypass_allowed": false,
+    "canonical_android_seed": "0.0.1"
   },
   "provenance": {
     "source_uri": "https://github.com/amoedo7/StoreAMO-Install",
@@ -51,12 +53,12 @@
         "command": "bash scripts/autocheck.sh",
         "cwd": ".",
         "timeout_seconds": 60,
-        "description": "Valida sintaxis, pin explícito de StoreAMO Install 0.0.5, rutas oficiales, verificación SHA-256 y la separación StoreAMO/instalador."
+        "description": "Valida sintaxis, pin inmutable de StoreAMO 0.0.1, rutas oficiales, SHA-256 y separación semilla/Store principal."
       }
     ]
   },
   "evidence": {
     "status": "inspected",
-    "refs": [".github/workflows/install-ci.yml", "scripts/autocheck.sh", "amoedo7/StoreAMO:bootstrap"]
+    "refs": [".github/workflows/install-ci.yml", "scripts/autocheck.sh", "amoedo7/StoreAMO:seed-v0.0.1"]
   }
 }
