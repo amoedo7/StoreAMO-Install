@@ -9,9 +9,9 @@
   "trust": "inspected",
   "unit": {
     "purpose": "Ser la puerta de entrada multiplataforma a StoreAMO sin contener claves privadas ni saltarse las protecciones del sistema operativo.",
-    "responsibility": "Resolver la plataforma y derivar a la entrada oficial de StoreAMO, verificando en Android la release bootstrap y su SHA-256 antes de abrir el instalador visible del sistema.",
+    "responsibility": "Resolver la plataforma y derivar a StoreAMO Install; en Android fijar la release del helper, verificar SHA-256 y usar una frontera de instalación dedicada con confirmación visible del sistema.",
     "owner": "human_responsible",
-    "capabilities": ["distribution-entrypoint", "bootstrap-discovery", "sha256-verification", "platform-routing"]
+    "capabilities": ["distribution-entrypoint", "bootstrap-discovery", "sha256-verification", "platform-routing", "package-installer-boundary"]
   },
   "model": {
     "inherits": [],
@@ -19,7 +19,9 @@
     "rules": [
       "No contiene claves privadas ni material de firma.",
       "No instala APK de forma silenciosa ni evita la confirmación visible de Android.",
-      "La entrada Android debe permanecer fijada a una release bootstrap explícita y verificar SHA-256."
+      "La entrada Android permanece fijada a una release StoreAMO Install explícita y verifica SHA-256.",
+      "REQUEST_INSTALL_PACKAGES pertenece sólo al helper dedicado; StoreAMO principal no lo hereda.",
+      "No desactivar ni eludir Play Protect o políticas del dispositivo."
     ]
   },
   "map": {
@@ -33,12 +35,13 @@
   "policy": {
     "contains_private_signing_material": false,
     "silent_install_allowed": false,
-    "system_confirmation_required": true
+    "system_confirmation_required": true,
+    "play_protect_bypass_allowed": false
   },
   "provenance": {
     "source_uri": "https://github.com/amoedo7/StoreAMO-Install",
     "source_type": "git-repository",
-    "source_ref": "769b338e39a0a1b665cb1c768a65b72ae049601d"
+    "source_ref": "main"
   },
   "health": {
     "checks": [
@@ -48,12 +51,12 @@
         "command": "bash scripts/autocheck.sh",
         "cwd": ".",
         "timeout_seconds": 60,
-        "description": "Valida sintaxis, pin explícito de Bootstrap 0.0.3, assets oficiales y ausencia de la release bootstrap insegura 0.0.2."
+        "description": "Valida sintaxis, pin explícito de StoreAMO Install 0.0.5, rutas oficiales, verificación SHA-256 y la separación StoreAMO/instalador."
       }
     ]
   },
   "evidence": {
     "status": "inspected",
-    "refs": [".github/workflows/install-ci.yml", "scripts/autocheck.sh"]
+    "refs": [".github/workflows/install-ci.yml", "scripts/autocheck.sh", "amoedo7/StoreAMO:bootstrap"]
   }
 }
