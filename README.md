@@ -1,47 +1,40 @@
 <div align="center">
 
-# StoreAMO Install
+# StoreAMO — entrada desde cero
 
-**La puerta de entrada mínima y verificable para instalar y actualizar StoreAMO.**
+Este repositorio queda como **compatibilidad multiplataforma y documentación**. En Android, la puerta oficial ya no es una serie `StoreAMO Install 0.0.x`.
 
-Android / Termux · Bash · Fish · Windows · macOS · Linux · iPhone / iPad · Web
+## [⬇ Descargar semilla StoreAMO 0.0.1](https://github.com/amoedo7/StoreAMO/releases/download/seed-v0.0.1/StoreAMO-0.0.1.apk)
+
+**StoreAMO 0.0.1 es la semilla canónica, permanente e inmutable del ecosistema.**
 
 </div>
 
 ---
 
-## Android — la forma recomendada
+## Android — forma oficial
 
-StoreAMO usa ahora el mismo principio de seguridad de una tienda alternativa como F-Droid: **la tienda y el instalador están separados**.
+La semilla `StoreAMO 0.0.1` tiene una única pantalla: **Actualizaciones**.
 
-- `StoreAMO` navega catálogo, verifica metadatos y no tiene permiso para instalar paquetes.
-- `StoreAMO Install` es un helper mínimo con paquete propio `com.desarrollamo.storeamo.bootstrap`.
-- Sólo declara `INTERNET` y `REQUEST_INSTALL_PACKAGES`.
-- Antes de descargar, Android te pide autorizar **StoreAMO Install** como fuente.
-- El helper acepta únicamente la release estable oficial de `amoedo7/StoreAMO`, exige HTTPS y verifica SHA-256.
-- La instalación se entrega a `PackageInstaller`: **Android conserva siempre la confirmación final**.
-- StoreAMO Install no desactiva, modifica ni elude Play Protect.
+Su trabajo es:
+
+1. pedir a Android autorización para **instalar desde esta fuente**;
+2. descargar únicamente la release estable oficial de StoreAMO;
+3. verificar el APK con el SHA-256 publicado;
+4. entregar el APK a `PackageInstaller`;
+5. dejar siempre a Android la confirmación final visible.
+
+Permisos de la semilla: sólo `INTERNET` y `REQUEST_INSTALL_PACKAGES`. No necesita almacenamiento, accesibilidad, overlay, contactos, `QUERY_ALL_PACKAGES` ni permisos de borrado.
+
+Las antiguas pruebas `StoreAMO Install 0.0.5` y `0.0.6` quedan como **historial técnico**. No deben usarse como puerta oficial ni evolucionar a nuevas versiones bootstrap.
 
 ### Descarga directa
 
-Cuando `bootstrap-v0.0.5` esté publicado, el APK canónico es:
+[**Descargar semilla StoreAMO 0.0.1**](https://github.com/amoedo7/StoreAMO/releases/download/seed-v0.0.1/StoreAMO-0.0.1.apk)
 
-`https://github.com/amoedo7/StoreAMO/releases/download/bootstrap-v0.0.5/StoreAMO-Bootstrap-0.0.5.apk`
+SHA-256 oficial:
 
-Y su suma oficial:
-
-`https://github.com/amoedo7/StoreAMO/releases/download/bootstrap-v0.0.5/SHA256SUMS.txt`
-
-Flujo:
-
-1. Descargá **StoreAMO Install 0.0.5** desde la release oficial.
-2. Android puede pedir permiso al navegador/gestor de archivos para instalar esa primera APK.
-3. Abrí **StoreAMO Install**.
-4. Tocá **Instalar / actualizar StoreAMO**.
-5. La app abre directamente la pantalla Android de **Permitir desde esta fuente** si todavía falta autorización.
-6. Al volver, descarga StoreAMO, verifica SHA-256 y abre la confirmación de instalación del sistema.
-
-No recomendamos desactivar Play Protect globalmente. Si Android o Play Protect bloquean una instalación, el helper conserva y muestra el resultado del sistema en lugar de ocultarlo.
+https://github.com/amoedo7/StoreAMO/releases/download/seed-v0.0.1/SHA256SUMS.txt
 
 ## Android / Termux
 
@@ -49,7 +42,7 @@ No recomendamos desactivar Play Protect globalmente. Si Android o Play Protect b
 curl -fsSL https://raw.githubusercontent.com/amoedo7/StoreAMO-Install/main/install.sh | bash
 ```
 
-El script descarga **StoreAMO Install**, verifica `SHA256SUMS.txt` y abre el APK visible en Android. Después las instalaciones/actualizaciones de StoreAMO pasan por el helper.
+El script descarga la **semilla 0.0.1**, verifica `SHA256SUMS.txt` y abre el APK visible en Android. Después, la propia semilla mantiene instalada/actualizada la Store principal.
 
 ## Fish
 
@@ -79,6 +72,6 @@ No se intenta instalar APK. La entrada es StoreAMO Web/PWA. Ver [`ios/README.md`
 
 ## Frontera de seguridad
 
-StoreAMO Install nunca contiene claves privadas ni material de firma. La release de producción se firma en el pipeline protegido de StoreAMO con la identidad release persistente. El repositorio de entrada sólo contiene rutas públicas, verificaciones y documentación.
+La semilla no contiene claves privadas ni material de firma. Sólo acepta la distribución oficial de `amoedo7/StoreAMO`, exige HTTPS y SHA-256, y usa la confirmación visible del sistema operativo. No desactiva ni elude Play Protect.
 
-**DesarrollAMO** · un ecosistema, una tienda, una frontera de instalación explícita.
+**DesarrollAMO** · un ecosistema, una tienda, una semilla permanente.
