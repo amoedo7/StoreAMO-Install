@@ -15,7 +15,7 @@
   },
   "model": {
     "inherits": [],
-    "context": ["README.md", "install.sh", "install.fish", "install.ps1"],
+    "context": ["README.md", "install.sh", "install.fish", "install.ps1", "RECOVERY.md"],
     "rules": [
       "No contiene claves privadas ni material de firma.",
       "No instala APK de forma silenciosa ni evita la confirmación visible de Android.",
@@ -59,6 +59,6 @@
   },
   "evidence": {
     "status": "inspected",
-    "refs": [".github/workflows/install-ci.yml", "scripts/autocheck.sh", "amoedo7/StoreAMO:seed-v0.0.1"]
+    "refs": [".github/workflows/install-ci.yml", "scripts/autocheck.sh", "RECOVERY.md", "amoedo7/StoreAMO:seed-v0.0.1"]
   }
 }
